@@ -1,40 +1,28 @@
 package com.ys.ysmvi.ui.fragment.sample
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ys.ysmvi.base.YsBaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.util.Date
 
-class FmSampleViewModel() : ViewModel() {
-    private val channel = MutableStateFlow<FmSampleIntent>(FmSampleIntent.Init)
-    private val _state = MutableStateFlow<FmSampleState>(FmSampleState.Init)
+class FmSampleViewModel(): YsBaseViewModel<FmSampleIntent, FmSampleState>() {
     private val number = MutableStateFlow<Int>(0)
-    val state: StateFlow<FmSampleState> get() = _state
 
-    init {
-        handleIntent()
-        dataProcess()
+    override fun createInitialState(): FmSampleState { return FmSampleState.Init }
+
+    override fun handleIntent(intent: FmSampleIntent) {
+        when (intent) {
+            FmSampleIntent.Init -> {}
+            FmSampleIntent.OnBtnDialog -> _state.value = FmSampleState.ShowDialog("Message", "${number.value}", Date().time)
+            FmSampleIntent.OnBtnToast -> _state.value = FmSampleState.ShowToast("CurrentNumber", "${number.value}", Date().time)
+            is FmSampleIntent.OnBtnDecreaseClick -> number.value -= intent.num
+            is FmSampleIntent.OnBtnIncreaseClick -> number.value += intent.num
+        }
     }
 
-    fun processIntent(intent: FmSampleIntent) { channel.value = intent }
-    private fun handleIntent() {
-        viewModelScope.launch {
-            channel.collect { intent ->
-                when (intent) {
-                    FmSampleIntent.Init -> {}
-                    is FmSampleIntent.ShowDialog -> _state.value = FmSampleState.ShowDialog(intent.tag)
-                    is FmSampleIntent.ShowToast -> {
-                        when (intent.tag) {
-                            "currentNumber" -> _state.value = FmSampleState.ShowToast(intent.tag, "${number.value}")
-                            "content" -> _state.value = FmSampleState.ShowToast(intent.tag, "${intent.content}")
-                        }
-                    }
-                    is FmSampleIntent.OnBtnDecreaseClick -> number.value -= intent.num
-                    is FmSampleIntent.OnBtnIncreaseClick -> number.value += intent.num
-                }
-            }
-        }
+    init {
+        dataProcess()
     }
 
     private fun dataProcess() {

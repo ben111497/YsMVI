@@ -22,13 +22,11 @@ abstract class YsBaseActivity<ViewModel: androidx.lifecycle.ViewModel, binding: 
         initViewModel()
         collectViewModel()
         setListener()
-        init()
     }
 
     abstract fun initViewBinding()
     abstract fun initViewModel()
     abstract fun collectViewModel()
-    abstract fun init()
     abstract fun setListener()
 
     fun checkAndRequestPermission(permission: String, TAG: Int): Boolean {

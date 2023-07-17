@@ -32,14 +32,12 @@ abstract class YsBaseFragment<ViewModel: androidx.lifecycle.ViewModel, binding: 
         super.onViewCreated(view, savedInstanceState)
         collectViewModel()
         setListener()
-        init()
     }
 
     abstract fun initViewBinding()
     abstract fun initViewModel()
     abstract fun argument(bundle: Bundle?)
     abstract fun collectViewModel()
-    abstract fun init()
     abstract fun setListener()
 
     fun checkAndRequestPermission(permission: String, TAG: Int, result: (Boolean, Int) -> Unit): Boolean {

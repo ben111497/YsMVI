@@ -32,13 +32,12 @@ class FmSample: YsBaseFragment<FmSampleViewModel, FmSampleBinding>() {
                         FmSampleState.Init -> {}
                         is FmSampleState.ShowDialog -> {
                             when (it.tag) {
-                                "back" -> showBackDialog(it.tag)
-                                "message" -> showMessageDialog(it.tag)
+                                "Message" -> showMessageDialog(it.tag, it.content)
                             }
                         }
                         is FmSampleState.ShowToast -> {
                             when (it.tag) {
-                                "currentNumber", "current" -> showToast(it.content)
+                                "CurrentNumber" -> showToast(it.content)
                             }
                         }
                         is FmSampleState.NumberChange -> binding?.tvNumber?.text = "${it.num}"
@@ -48,16 +47,14 @@ class FmSample: YsBaseFragment<FmSampleViewModel, FmSampleBinding>() {
         }
     }
 
-    override fun init() {}
-
     override fun setListener() {
-        requireActivity().setOnBackPressed(this) { viewModel.processIntent(FmSampleIntent.ShowDialog("back")) }
+        requireActivity().setOnBackPressed(this) { showBackDialog("Back", "...") }
 
         binding?.run {
             btnAdd.setOnClickListener { viewModel.processIntent(FmSampleIntent.OnBtnIncreaseClick(1)) }
             btnDecrease.setOnClickListener { viewModel.processIntent(FmSampleIntent.OnBtnDecreaseClick(1)) }
-            btnDialog.setOnClickListener { viewModel.processIntent(FmSampleIntent.ShowDialog("message")) }
-            btnToast.setOnClickListener { viewModel.processIntent(FmSampleIntent.ShowToast("currentNumber")) }
+            btnDialog.setOnClickListener { viewModel.processIntent(FmSampleIntent.OnBtnDialog) }
+            btnToast.setOnClickListener { viewModel.processIntent(FmSampleIntent.OnBtnToast) }
         }
     }
 
@@ -66,17 +63,17 @@ class FmSample: YsBaseFragment<FmSampleViewModel, FmSampleBinding>() {
      */
     private fun showToast(content: String) = Toast.makeText(requireActivity(), content, Toast.LENGTH_SHORT).show()
 
-    private fun showBackDialog(tag: String) {
+    private fun showBackDialog(tag: String, content: String) {
         ShowMessageDialog<FmSampleViewModel> {
-            it.setTitle("...")
+            it.setTitle("$content")
             it.setListener(object: ShowMessageDialog.Listener {
                 override fun onOk() { it.dismiss() }
             })
         }.show(requireActivity().supportFragmentManager, tag)
     }
 
-    private fun showMessageDialog(tag: String) {
-        DialogSample(binding?.tvNumber?.text.toString()).also {
+    private fun showMessageDialog(tag: String, content: String) {
+        DialogSample(content).also {
             it.setListener(object: DialogSample.Listener {
                 override fun onLeft() {
                     viewModel.processIntent(FmSampleIntent.OnBtnDecreaseClick(1))

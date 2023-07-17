@@ -22,16 +22,11 @@ class AcMain : YsBaseActivity<AcMainViewModel, AcMainBinding>() {
             viewModel.state.collect {
                 when (it) {
                     AcMainState.Init -> {}
-                    is AcMainState.TvTitleState -> {}
-                    is AcMainState.TvContentState -> {}
-                    is AcMainState.DialogLoadingState -> {}
                     AcMainState.Error -> {}
                 }
             }
         }
     }
-
-    override fun init() {}
 
     override fun setListener() {}
 }

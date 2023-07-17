@@ -1,4 +1,4 @@
-package com.example.mvvm.helper
+package com.ys.ysmvi.helper
 
 import android.app.Activity
 import android.content.Context
