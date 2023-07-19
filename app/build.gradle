@@ -52,21 +52,21 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     implementation 'com.google.code.gson:gson:2.8.9'
     implementation 'com.github.bumptech.glide:glide:4.12.0'
+    // Ys MVI
     implementation project(':YsMVI')
-
     // ViewModel and LiveData
     implementation 'android.arch.lifecycle:extensions:1.1.1'
     //noinspection LifecycleAnnotationProcessorWithJava8
     annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
     implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.1'
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
-
     // Kotlin coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
-
-
     // Android Navigation Architecture
-    implementation "androidx.navigation:navigation-fragment-ktx:2.2.0"
-    implementation "androidx.navigation:navigation-ui-ktx:2.2.0"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.6.0"
+    implementation "androidx.navigation:navigation-ui-ktx:2.6.0"
+    // DataStore
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.1"
 }

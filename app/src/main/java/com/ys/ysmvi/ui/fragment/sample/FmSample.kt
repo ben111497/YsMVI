@@ -1,25 +1,33 @@
 package com.ys.ysmvi.ui.fragment.sample
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
+import androidx.datastore.dataStoreFile
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.ys.ysmvi.base.YsBaseFragment
+import com.ys.ysmvi.data.DataStoreKeys
 import com.ys.ysmvi.databinding.FmSampleBinding
 import com.ys.ysmvi.helper.setOnBackPressed
+import com.ys.ysmvi.model.DataStore
+import com.ys.ysmvi.model.Repository
 import com.ys.ysmvi.ui.dialog.DialogSample
 import com.ys.ysmvi.ui.dialog.ShowMessageDialog
+import com.ys.ysmvi.ui.Factory.ViewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class FmSample: YsBaseFragment<FmSampleViewModel, FmSampleBinding>() {
-    override fun initViewModel() {
-        viewModel = ViewModelProvider(this)[FmSampleViewModel::class.java]
-    }
-
     override fun initViewBinding() {
         binding = FmSampleBinding.inflate(layoutInflater)
+    }
+
+    override fun initViewModel() {
+        //viewModel = ViewModelProvider(this)[FmSampleViewModel::class.java]
+        viewModel = ViewModelProvider(this, ViewModelFactory(Repository.getInstance(requireContext())))[FmSampleViewModel::class.java]
     }
 
     override fun argument(bundle: Bundle?) {}
