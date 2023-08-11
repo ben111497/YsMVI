@@ -1,9 +1,14 @@
 package com.ys.ysmvi.ui.fragment.sample
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.ys.ysmvi.base.YsBaseViewModel
 import com.ys.ysmvi.data.DataStoreKeys
+import com.ys.ysmvi.data.room.Api
+import com.ys.ysmvi.data.room.RoomSample
 import com.ys.ysmvi.model.Repository
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.util.Date
@@ -24,19 +29,34 @@ class FmSampleViewModel(private val repository: Repository): YsBaseViewModel<FmS
     }
 
     init {
-        dataProcess()
         getNumber()
+        dataProcess()
     }
 
     private fun getNumber() {
         viewModelScope.launch {
-            repository.dataStore.getPDS(DataStoreKeys.NUMBER, 0).collect { number.value = it }
+//            launch {
+//                (repository.room as RoomSample).ApiDao().getByName("number")?.collect {
+//                    Log.e("room", it.json)
+//                    this.cancel()
+//                }
+//            }
+            launch {
+                repository.dataStore.getPDS(DataStoreKeys.NUMBER, 0).collect {
+                    Log.e("dataStore", "$it")
+                    number.value = it
+                    this.cancel()
+                }
+            }
         }
     }
 
     private fun setNumber(num: Int) {
         number.value = num
-        viewModelScope.launch { repository.dataStore.setPDS(DataStoreKeys.NUMBER, num) }
+        viewModelScope.launch {
+//            (repository.room as RoomSample).ApiDao().insert(Api("number",  "{number: $num}"))
+            repository.dataStore.setPDS(DataStoreKeys.NUMBER, num)
+        }
     }
 
     private fun dataProcess() {

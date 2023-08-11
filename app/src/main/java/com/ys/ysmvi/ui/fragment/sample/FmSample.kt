@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.ys.ysmvi.base.YsBaseFragment
 import com.ys.ysmvi.data.DataStoreKeys
+import com.ys.ysmvi.data.room.RoomSample
 import com.ys.ysmvi.databinding.FmSampleBinding
 import com.ys.ysmvi.helper.setOnBackPressed
 import com.ys.ysmvi.model.DataStore
@@ -27,7 +28,8 @@ class FmSample: YsBaseFragment<FmSampleViewModel, FmSampleBinding>() {
 
     override fun initViewModel() {
         //viewModel = ViewModelProvider(this)[FmSampleViewModel::class.java]
-        viewModel = ViewModelProvider(this, ViewModelFactory(Repository.getInstance(requireContext())))[FmSampleViewModel::class.java]
+        val repo = Repository.getInstance(requireContext(), RoomSample.instance(requireContext()))
+        viewModel = ViewModelProvider(this, ViewModelFactory(repo))[FmSampleViewModel::class.java]
     }
 
     override fun argument(bundle: Bundle?) {}
