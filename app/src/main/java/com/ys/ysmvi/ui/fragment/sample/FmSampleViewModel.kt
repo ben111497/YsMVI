@@ -4,10 +4,8 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.ys.ysmvi.base.YsBaseViewModel
 import com.ys.ysmvi.data.DataStoreKeys
-import com.ys.ysmvi.data.room.Api
-import com.ys.ysmvi.data.room.RoomSample
-import com.ys.ysmvi.model.Repository
-import kotlinx.coroutines.Job
+import com.ys.ysmvi.data.retrofit.RequestInterface
+import com.ys.ysmvi.model.retrofit.Repository
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -47,6 +45,9 @@ class FmSampleViewModel(private val repository: Repository): YsBaseViewModel<FmS
                     number.value = it
                     this.cancel()
                 }
+            }
+            launch {
+                (repository.retrofit.getService("https://api.github.com") as RequestInterface)
             }
         }
     }

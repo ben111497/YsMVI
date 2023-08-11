@@ -1,11 +1,13 @@
-package com.ys.ysmvi.model
+package com.ys.ysmvi.model.retrofit
 
 import android.content.Context
 import androidx.room.RoomDatabase
+import com.ys.ysmvi.model.DataStore
 
 class Repository private constructor(context: Context, dataBase: RoomDatabase?) {
     val dataStore: DataStore = DataStore(context)
     val room: RoomDatabase? = dataBase
+    val retrofit: DynamicRetrofit = DynamicRetrofit
 
     companion object {
         private var instance: Repository? = null
