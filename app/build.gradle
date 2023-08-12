@@ -38,6 +38,16 @@ android {
         jvmTarget = '17'
         freeCompilerArgs += ["-Xjvm-default=all",]
     }
+
+    // Mac M1
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+        options.compilerArgs.addAll(["--release", "8"])
+    }
+
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
+        kotlinOptions.jvmTarget = "17"
+    }
 }
 
 dependencies {

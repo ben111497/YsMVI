@@ -8,7 +8,6 @@ import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
-
 @Dao
 interface YsBaseDao<T : YsBaseEntity> {
     @Insert(onConflict = OnConflictStrategy.REPLACE)

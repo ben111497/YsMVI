@@ -46,6 +46,7 @@ class FmSample: YsBaseFragment<FmSampleViewModel, FmSampleBinding>() {
                             }
                         }
                         is FmSampleState.NumberChange -> binding?.tvNumber?.text = "${it.num}"
+                        is FmSampleState.GetGitData -> {}
                     }
                 }
             }
@@ -60,6 +61,10 @@ class FmSample: YsBaseFragment<FmSampleViewModel, FmSampleBinding>() {
             btnDecrease.setOnClickListener { viewModel.processIntent(FmSampleIntent.OnBtnDecreaseClick(1)) }
             btnDialog.setOnClickListener { viewModel.processIntent(FmSampleIntent.OnBtnDialog) }
             btnToast.setOnClickListener { viewModel.processIntent(FmSampleIntent.OnBtnToast) }
+            btnGet.setOnClickListener {
+                hideKeyboard()
+                viewModel.processIntent(FmSampleIntent.OnBtnGetClick(edName.text.toString()))
+            }
         }
     }
 
