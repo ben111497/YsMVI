@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.ys.ysmvi.base.YsBaseViewModel
-import com.ys.ysmvi.data.DataStoreKeys
 import com.ys.ysmvi.data.retrofit.Repo
 import com.ys.ysmvi.data.room.Api
 import com.ys.ysmvi.data.room.RoomSample
@@ -58,7 +57,7 @@ class FmSampleViewModel(private val repo: FmSampleRepo): YsBaseViewModel<FmSampl
                 }
             }
             launch {
-                repo.repo.dataStore.getPDS(DataStoreKeys.NUMBER, 0).collect {
+                repo.repo.dataStore.getPDS("Number", 0).collect {
                     Log.e("dataStore", "$it")
                     number.value = it
                     this.cancel()
@@ -99,7 +98,7 @@ class FmSampleViewModel(private val repo: FmSampleRepo): YsBaseViewModel<FmSampl
     private fun setNumber(num: Int) {
         number.value = num
         viewModelScope.launch {
-            repo.repo.dataStore.setPDS(DataStoreKeys.NUMBER, num)
+            repo.repo.dataStore.setPDS("Number", num)
         }
     }
 
