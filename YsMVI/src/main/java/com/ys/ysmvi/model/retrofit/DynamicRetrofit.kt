@@ -64,7 +64,7 @@ object DynamicRetrofit {
         override fun onResponse(call: Call<T>, response: Response<T>) {
             if (response.isSuccessful) {
                 Log.e("API Success", response.body().toString())
-                ApiResponse.value = YsResponse.Success(tag, response.body().toString(), hash)
+                ApiResponse.value = YsResponse.Success(tag, response.body(), hash)
             } else {
                 Log.e("API Failed", response.errorBody()?.charStream()?.readText().toString())
                 ApiResponse.value = YsResponse.Failed(tag, response.errorBody()?.charStream()?.readText().toString(), hash)
@@ -72,7 +72,7 @@ object DynamicRetrofit {
         }
 
         override fun onFailure(call: Call<T>, t: Throwable) {
-            Log.e("API Failed", t.message.toString())
+            Log.e("API Failure", t.message.toString())
             if (t is SocketTimeoutException) {
                 ApiResponse.value = YsResponse.TimeOut(tag, hash)
             } else {

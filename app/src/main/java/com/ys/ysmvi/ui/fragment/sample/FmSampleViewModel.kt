@@ -3,27 +3,23 @@ package com.ys.ysmvi.ui.fragment.sample
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.ys.ysmvi.base.YsBaseViewModel
 import com.ys.ysmvi.data.DataStoreKeys
 import com.ys.ysmvi.data.retrofit.Repo
-import com.ys.ysmvi.data.retrofit.RequestInterface
-import com.ys.ysmvi.model.retrofit.Repository
+import com.ys.ysmvi.data.room.Api
+import com.ys.ysmvi.data.room.RoomSample
 import com.ys.ysmvi.model.retrofit.YsResponse
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.util.Date
 
 class FmSampleViewModel(private val repo: FmSampleRepo): YsBaseViewModel<FmSampleIntent, FmSampleState>() {
     private val number = MutableStateFlow<Int>(0)
     override fun createInitialState(): FmSampleState { return FmSampleState.Init }
     override fun handleIntent(intent: FmSampleIntent) {
         when (intent) {
-            FmSampleIntent.Init -> getNumber()
+            FmSampleIntent.Init -> {}
             FmSampleIntent.OnBtnDialog -> _state.value = FmSampleState.ShowDialog("Message", "${number.value}")
             FmSampleIntent.OnBtnToast -> _state.value = FmSampleState.ShowToast("CurrentNumber", "${number.value}")
             is FmSampleIntent.OnBtnDecreaseClick -> setNumber(number.value - intent.num)
@@ -41,19 +37,26 @@ class FmSampleViewModel(private val repo: FmSampleRepo): YsBaseViewModel<FmSampl
      * Init
      */
     init {
-        getNumber()
+        initData()
         dataProcess()
         apiResponse()
     }
 
-    private fun getNumber() {
+    private fun initData() {
         viewModelScope.launch {
-//            launch {
-//                (repo.room as RoomSample).ApiDao().getByName("number")?.collect {
-//                    Log.e("room", it.json)
-//                    this.cancel()
-//                }
-//            }
+            launch {
+                (repo.repo.room as RoomSample).ApiDao().getByName("GitData").collect {
+                    if (it == null) {
+                        this.cancel()
+                        return@collect
+                    }
+
+                    val data = Gson().fromJson<ArrayList<Repo>>(it.json, object : TypeToken<ArrayList<Repo>>() {}.type)[0]
+                    val str = "name: ${data.name}\nid: ${data.id}\ndata: ${data.owner}"
+                    _state.value = FmSampleState.GetGitData(str)
+                    this.cancel()
+                }
+            }
             launch {
                 repo.repo.dataStore.getPDS(DataStoreKeys.NUMBER, 0).collect {
                     Log.e("dataStore", "$it")
@@ -72,11 +75,13 @@ class FmSampleViewModel(private val repo: FmSampleRepo): YsBaseViewModel<FmSampl
         viewModelScope.launch {
             repo.repo.retrofit.ApiResponse.collect {
                 when (it) {
-                    is YsResponse.Success -> {
+                    is YsResponse.Success<*> -> {
                         when (it.tag) {
                             "GitData" -> {
-                                //API成功 但是沒有 toast?
-                                _state.value = FmSampleState.ShowToast("Success", "${it.data}")
+                                val data = (it.data as ArrayList<Repo>)[0]
+                                val str = "name: ${data.name}\nid: ${data.id}\ndata: ${data.owner}"
+                                (repo.repo.room as RoomSample).ApiDao().insert(Api(it.tag, Gson().toJson(it.data)))
+                                _state.value = FmSampleState.GetGitData(str)
                             }
                         }
                     }
@@ -94,7 +99,6 @@ class FmSampleViewModel(private val repo: FmSampleRepo): YsBaseViewModel<FmSampl
     private fun setNumber(num: Int) {
         number.value = num
         viewModelScope.launch {
-//            (repo.room as RoomSample).ApiDao().insert(Api("number", "{number: $num}"))
             repo.repo.dataStore.setPDS(DataStoreKeys.NUMBER, num)
         }
     }

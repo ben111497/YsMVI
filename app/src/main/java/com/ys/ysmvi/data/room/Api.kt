@@ -7,6 +7,7 @@ import androidx.room.Query
 import com.ys.ysmvi.base.YsBaseDao
 import com.ys.ysmvi.base.YsBaseEntity
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 @Entity(tableName = "API_TABLE")
 data class Api(
@@ -18,5 +19,5 @@ data class Api(
 @Dao
 interface ApiDao: YsBaseDao<Api> {
     @Query("SELECT * FROM API_TABLE WHERE name = :name")
-    fun getByName(name: String): Flow<Api>?
+    fun getByName(name: String): Flow<Api?>
 }

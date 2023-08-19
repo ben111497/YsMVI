@@ -43,10 +43,11 @@ class FmSample: YsBaseFragment<FmSampleViewModel, FmSampleBinding>() {
                         is FmSampleState.ShowToast -> {
                             when (it.tag) {
                                 "CurrentNumber" -> showToast(it.content)
+                                else -> showToast(it.content)
                             }
                         }
                         is FmSampleState.NumberChange -> binding?.tvNumber?.text = "${it.num}"
-                        is FmSampleState.GetGitData -> {}
+                        is FmSampleState.GetGitData -> binding?.tvRes?.text = it.text
                     }
                 }
             }
