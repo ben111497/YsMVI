@@ -1,4 +1,4 @@
-package com.ys.ysmvi.model.retrofit
+package com.ys.ysmvi.model
 
 import java.util.Date
 

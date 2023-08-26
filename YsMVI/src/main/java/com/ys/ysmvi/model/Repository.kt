@@ -1,18 +1,14 @@
-package com.ys.ysmvi.model.retrofit
+package com.ys.ysmvi.model
 
 import android.content.Context
-import android.util.Log
 import androidx.room.RoomDatabase
-import com.ys.ysmvi.model.DataStore
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.net.SocketTimeoutException
+import com.ys.ysmvi.model.retrofit.DynamicRetrofit
 
 class Repository private constructor(context: Context, dataBase: RoomDatabase?) {
     val dataStore: DataStore = DataStore(context)
     val room: RoomDatabase? = dataBase
     val retrofit: DynamicRetrofit = DynamicRetrofit
+    val okHttp: OkHttp = OkHttp
 
     companion object {
         private var instance: Repository? = null

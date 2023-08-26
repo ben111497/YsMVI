@@ -1,8 +1,8 @@
 package com.ys.ysmvi.model.retrofit
 
 import android.util.Log
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.ys.ysmvi.model.YsResponse
 import kotlinx.coroutines.flow.MutableStateFlow
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
@@ -63,16 +63,16 @@ object DynamicRetrofit {
     fun <T> res(tag: String, hash: Long) = object: Callback<T> {
         override fun onResponse(call: Call<T>, response: Response<T>) {
             if (response.isSuccessful) {
-                Log.e("API Success", response.body().toString())
+                Log.e("(Retrofit)API Success", response.body().toString())
                 ApiResponse.value = YsResponse.Success(tag, response.body(), hash)
             } else {
-                Log.e("API Failed", response.errorBody()?.charStream()?.readText().toString())
+                Log.e("(Retrofit)API Failed", response.errorBody()?.charStream()?.readText().toString())
                 ApiResponse.value = YsResponse.Failed(tag, response.errorBody()?.charStream()?.readText().toString(), hash)
             }
         }
 
         override fun onFailure(call: Call<T>, t: Throwable) {
-            Log.e("API Failure", t.message.toString())
+            Log.e("(Retrofit)API Failure", t.message.toString())
             if (t is SocketTimeoutException) {
                 ApiResponse.value = YsResponse.TimeOut(tag, hash)
             } else {

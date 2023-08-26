@@ -2,7 +2,8 @@ package com.ys.ysmvi.ui.fragment.sample
 
 
 import com.ys.ysmvi.data.retrofit.RequestInterface
-import com.ys.ysmvi.model.retrofit.Repository
+import com.ys.ysmvi.model.OkHttp
+import com.ys.ysmvi.model.Repository
 import java.util.Date
 
 class FmSampleRepo(val repo: Repository) {
@@ -11,5 +12,9 @@ class FmSampleRepo(val repo: Repository) {
             it as RequestInterface
             it.getListRepos(name).enqueue(repo.retrofit.res(tag, hash))
         }
+    }
+
+    fun getGitDataOkHttp(tag: String, url: String, header: ArrayList<OkHttp.Header>? = null, hash: Long = Date().time) {
+        repo.okHttp.get(tag, url, header, hash)
     }
 }

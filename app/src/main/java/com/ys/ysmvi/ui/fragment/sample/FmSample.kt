@@ -8,7 +8,8 @@ import com.ys.ysmvi.base.YsBaseFragment
 import com.ys.ysmvi.data.room.RoomSample
 import com.ys.ysmvi.databinding.FmSampleBinding
 import com.ys.ysmvi.helper.setOnBackPressed
-import com.ys.ysmvi.model.retrofit.Repository
+import com.ys.ysmvi.model.OkHttp
+import com.ys.ysmvi.model.Repository
 import com.ys.ysmvi.ui.dialog.DialogSample
 import com.ys.ysmvi.ui.dialog.ShowMessageDialog
 import com.ys.ysmvi.ui.Factory.ViewModelFactory

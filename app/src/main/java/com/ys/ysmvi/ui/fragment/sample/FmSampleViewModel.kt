@@ -8,7 +8,7 @@ import com.ys.ysmvi.base.YsBaseViewModel
 import com.ys.ysmvi.data.retrofit.Repo
 import com.ys.ysmvi.data.room.Api
 import com.ys.ysmvi.data.room.RoomSample
-import com.ys.ysmvi.model.retrofit.YsResponse
+import com.ys.ysmvi.model.YsResponse
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -104,5 +104,6 @@ class FmSampleViewModel(private val repo: FmSampleRepo): YsBaseViewModel<FmSampl
 
     private fun getGitDate(name: String) {
         viewModelScope.launch { repo.getGitData("GitData", name) }
+        viewModelScope.launch { repo.getGitDataOkHttp("GitData", "https://api.github.com/users/${name}/repos") }
     }
 }
