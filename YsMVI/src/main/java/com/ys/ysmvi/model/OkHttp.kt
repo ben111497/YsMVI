@@ -15,7 +15,7 @@ import java.util.Date
 object OkHttp {
     private val client = OkHttpClient()
     private var url = "http://base"
-    val okHttpResponse = MutableStateFlow<YsResponse>(YsResponse.Init)
+    val okHttpRes = MutableStateFlow<YsResponse>(YsResponse.Init)
 
     class Header(val name: String, var value: String)
 
@@ -40,21 +40,21 @@ object OkHttp {
                 override fun onResponse(call: Call, response: Response) {
                     if (response.isSuccessful) {
                         val data = response.body?.string()
-                        okHttpResponse.value = YsResponse.Success(tag, data, hash)
+                        okHttpRes.value = YsResponse.Success(tag, data, hash)
                         Log.e("(OkHttp)API Success", "data: $data")
                     } else {
-                        okHttpResponse.value = YsResponse.Failed(tag, response.message, hash)
+                        okHttpRes.value = YsResponse.Failed(tag, response.message, hash)
                         Log.e("(OkHttp)API UnSuccess", "Request failed with code: ${response.code}")
                     }
                 }
 
                 override fun onFailure(call: Call, e: IOException) {
-                    okHttpResponse.value = YsResponse.Failed(tag, e.message.toString(), hash)
+                    okHttpRes.value = YsResponse.Failed(tag, e.message.toString(), hash)
                     Log.e("(OkHttp)API Failed", "Request failed with code: ${e.message}")
                 }
             })
         } catch (e: IOException) {
-            okHttpResponse.value = YsResponse.Failed(tag, e.message.toString(), hash)
+            okHttpRes.value = YsResponse.Failed(tag, e.message.toString(), hash)
             Log.e("(OkHttp)API catch", "error msg: ${e.message}")
             e.printStackTrace()
         }

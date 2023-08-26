@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit
 
 
 object DynamicRetrofit {
-    val ApiResponse = MutableStateFlow<YsResponse>(YsResponse.Init)
+    val retrofitRes = MutableStateFlow<YsResponse>(YsResponse.Init)
     private var BASE_URL = "https://www.base"
     private var lastInterface: Class<*>? = null
     private var timeOut: Long = 10 * 1000
@@ -64,19 +64,19 @@ object DynamicRetrofit {
         override fun onResponse(call: Call<T>, response: Response<T>) {
             if (response.isSuccessful) {
                 Log.e("(Retrofit)API Success", response.body().toString())
-                ApiResponse.value = YsResponse.Success(tag, response.body(), hash)
+                retrofitRes.value = YsResponse.Success(tag, response.body(), hash)
             } else {
                 Log.e("(Retrofit)API Failed", response.errorBody()?.charStream()?.readText().toString())
-                ApiResponse.value = YsResponse.Failed(tag, response.errorBody()?.charStream()?.readText().toString(), hash)
+                retrofitRes.value = YsResponse.Failed(tag, response.errorBody()?.charStream()?.readText().toString(), hash)
             }
         }
 
         override fun onFailure(call: Call<T>, t: Throwable) {
             Log.e("(Retrofit)API Failure", t.message.toString())
             if (t is SocketTimeoutException) {
-                ApiResponse.value = YsResponse.TimeOut(tag, hash)
+                retrofitRes.value = YsResponse.TimeOut(tag, hash)
             } else {
-                ApiResponse.value = YsResponse.Failed(tag, t.message.toString(), hash)
+                retrofitRes.value = YsResponse.Failed(tag, t.message.toString(), hash)
             }
         }
     }

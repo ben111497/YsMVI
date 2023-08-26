@@ -7,7 +7,7 @@ import com.google.gson.reflect.TypeToken
 import com.ys.ysmvi.base.YsBaseViewModel
 import com.ys.ysmvi.data.retrofit.Repo
 import com.ys.ysmvi.data.room.Api
-import com.ys.ysmvi.data.room.RoomSample
+import com.ys.ysmvi.helper.fromJsonArray
 import com.ys.ysmvi.model.YsResponse
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,7 +44,7 @@ class FmSampleViewModel(private val repo: FmSampleRepo): YsBaseViewModel<FmSampl
     private fun initData() {
         viewModelScope.launch {
             launch {
-                (repo.repo.room as RoomSample).ApiDao().getByName("GitData").collect {
+                repo.room.ApiDao().getByName("GitData").collect {
                     if (it == null) {
                         this.cancel()
                         return@collect
@@ -57,7 +57,7 @@ class FmSampleViewModel(private val repo: FmSampleRepo): YsBaseViewModel<FmSampl
                 }
             }
             launch {
-                repo.repo.dataStore.getPDS("Number", 0).collect {
+                repo.dataStore.getPDS("Number", 0).collect {
                     Log.e("dataStore", "$it")
                     number.value = it
                     this.cancel()
@@ -72,21 +72,42 @@ class FmSampleViewModel(private val repo: FmSampleRepo): YsBaseViewModel<FmSampl
     }
     private fun apiResponse() {
         viewModelScope.launch {
-            repo.repo.retrofit.ApiResponse.collect {
-                when (it) {
-                    is YsResponse.Success<*> -> {
-                        when (it.tag) {
-                            "GitData" -> {
-                                val data = (it.data as ArrayList<Repo>)[0]
-                                val str = "name: ${data.name}\nid: ${data.id}\ndata: ${data.owner}"
-                                (repo.repo.room as RoomSample).ApiDao().insert(Api(it.tag, Gson().toJson(it.data)))
-                                _state.value = FmSampleState.GetGitData(str)
+            launch {
+                repo.retrofitRes.collect {
+                    when (it) {
+                        is YsResponse.Success<*> -> {
+                            when (it.tag) {
+                                "GitData" -> {
+                                    val data = (it.data as ArrayList<Repo>)[0]
+                                    val str = "name: ${data.name}\nid: ${data.id}\ndata: ${data.owner}"
+                                    repo.room.ApiDao().insert(Api(it.tag, Gson().toJson(it.data)))
+                                    _state.value = FmSampleState.GetGitData(str)
+                                }
                             }
                         }
+                        is YsResponse.Failed -> _state.value = FmSampleState.ShowToast("Failed", "Request Failed")
+                        is YsResponse.TimeOut -> _state.value = FmSampleState.ShowToast("TimeOut", "Time Out")
+                        else -> {}
                     }
-                    is YsResponse.Failed -> _state.value = FmSampleState.ShowToast("Failed", "Request Failed")
-                    is YsResponse.TimeOut -> _state.value = FmSampleState.ShowToast("TimeOut", "Time Out")
-                    else -> {}
+                }
+            }
+            launch {
+                repo.okHttpRes.collect {
+                    when (it) {
+                        is YsResponse.Success<*> -> {
+                            when (it.tag) {
+                                "GitData" -> {
+                                    val data: Repo = Gson().fromJsonArray<ArrayList<Repo>>(it.data as String)[0]
+                                    val str = "name: ${data.name}\nid: ${data.id}\ndata: ${data.owner}"
+                                    repo.room.ApiDao().insert(Api(it.tag, Gson().toJson(it.data)))
+                                    _state.value = FmSampleState.GetGitData(str)
+                                }
+                            }
+                        }
+                        is YsResponse.Failed -> _state.value = FmSampleState.ShowToast("Failed", "Request Failed")
+                        is YsResponse.TimeOut -> _state.value = FmSampleState.ShowToast("TimeOut", "Time Out")
+                        else -> {}
+                    }
                 }
             }
         }
@@ -98,7 +119,7 @@ class FmSampleViewModel(private val repo: FmSampleRepo): YsBaseViewModel<FmSampl
     private fun setNumber(num: Int) {
         number.value = num
         viewModelScope.launch {
-            repo.repo.dataStore.setPDS("Number", num)
+            repo.dataStore.setPDS("Number", num)
         }
     }
 
