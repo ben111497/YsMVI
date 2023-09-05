@@ -2,12 +2,11 @@ package com.ys.ysmvi.base
 
 import android.content.pm.PackageManager
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.viewbinding.ViewBinding
 
 
-abstract class YsBaseActivity<ViewModel: androidx.lifecycle.ViewModel, binding: ViewBinding>: AppCompatActivity() {
+abstract class YsBaseActivity<ViewModel: androidx.lifecycle.ViewModel, binding: ViewBinding>: YsAct() {
     lateinit var viewModel: ViewModel
     lateinit var binding: binding
     var mRequestPermission: RequestPermission? = null

@@ -16,16 +16,13 @@ object OkHttp {
     private val client = OkHttpClient()
     private var url = "http://base"
     val okHttpRes = MutableStateFlow<YsResponse>(YsResponse.Init)
-
     class Header(val name: String, var value: String)
-
     fun get(tag: String, url: String, header: ArrayList<Header>?, hash: Long = Date().time) {
         val req = setRequest(url, header)
             .addHeader("Content-type", "application/json")
             .build()
         sendRequest(tag, req, hash)
     }
-
     fun post(tag: String, url: String, json: String, header: ArrayList<Header>, hash: Long = Date().time) {
         val req = setRequest(url, header)
             .addHeader("Content-type", "application/json")

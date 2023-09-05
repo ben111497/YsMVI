@@ -1,12 +1,12 @@
 package com.ys.ysmvi.base
 
-import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
@@ -18,6 +18,7 @@ abstract class YsBaseFragment<ViewModel: androidx.lifecycle.ViewModel, binding: 
     lateinit var viewModel: ViewModel
     var binding: binding? = null
     var resource = this.context?.resources
+    val handler = Handler(Looper.myLooper()!!)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,18 +43,10 @@ abstract class YsBaseFragment<ViewModel: androidx.lifecycle.ViewModel, binding: 
     abstract fun collectViewModel()
     abstract fun setListener()
 
-    /**
-     * Function
-     */
     fun checkAndRequestPermission(permission: String, TAG: Int, result: (Boolean, Int) -> Unit): Boolean {
         return if (ActivityCompat.checkSelfPermission(requireActivity(), permission) != PackageManager.PERMISSION_GRANTED) {
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted -> result(isGranted, TAG) }.launch(permission)
             false
         } else true
-    }
-
-    fun hideKeyboard() {
-        val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(view?.windowToken, 0)
     }
 }

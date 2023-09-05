@@ -1,21 +1,25 @@
 package com.ys.ysmvi.ui.fragment.sample
 
+import android.app.Dialog
 import android.os.Bundle
+import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.ys.ysmvi.R
+import com.ys.ysmvi.base.SetupDialog
+import com.ys.ysmvi.base.YsAct
 import com.ys.ysmvi.base.YsBaseFragment
 import com.ys.ysmvi.data.room.RoomSample
 import com.ys.ysmvi.databinding.FmSampleBinding
 import com.ys.ysmvi.helper.setOnBackPressed
-import com.ys.ysmvi.model.OkHttp
 import com.ys.ysmvi.model.Repository
-import com.ys.ysmvi.ui.dialog.DialogSample
 import com.ys.ysmvi.ui.dialog.ShowMessageDialog
 import com.ys.ysmvi.ui.Factory.ViewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
 
 class FmSample: YsBaseFragment<FmSampleViewModel, FmSampleBinding>() {
     override fun initViewBinding() {
@@ -64,7 +68,7 @@ class FmSample: YsBaseFragment<FmSampleViewModel, FmSampleBinding>() {
             btnDialog.setOnClickListener { viewModel.processIntent(FmSampleIntent.OnBtnDialog) }
             btnToast.setOnClickListener { viewModel.processIntent(FmSampleIntent.OnBtnToast) }
             btnGet.setOnClickListener {
-                hideKeyboard()
+                YsAct.instance().hideKeyboard(binding?.root)
                 viewModel.processIntent(FmSampleIntent.OnBtnGetClick(edName.text.toString()))
             }
         }
@@ -75,6 +79,7 @@ class FmSample: YsBaseFragment<FmSampleViewModel, FmSampleBinding>() {
      */
     private fun showToast(content: String) = Toast.makeText(requireActivity(), content, Toast.LENGTH_SHORT).show()
 
+    //DialogFragment加入 Control
     private fun showBackDialog(tag: String, content: String) {
         ShowMessageDialog<FmSampleViewModel> {
             it.setTitle("$content")
@@ -85,16 +90,20 @@ class FmSample: YsBaseFragment<FmSampleViewModel, FmSampleBinding>() {
     }
 
     private fun showMessageDialog(tag: String, content: String) {
-        DialogSample(content).also {
-            it.setListener(object: DialogSample.Listener {
-                override fun onLeft() {
-                    viewModel.processIntent(FmSampleIntent.OnBtnDecreaseClick(1))
-                }
-
-                override fun onRight() {
-                    viewModel.processIntent(FmSampleIntent.OnBtnIncreaseClick(1))
-                }
-            })
-        }.show(requireActivity().supportFragmentManager, tag)
+        handler.post {
+            YsAct.instance()
+                .showDialog(object: SetupDialog(R.layout.dialog_message) {
+                    override fun setup(dialog: Dialog) {
+                        dialog.findViewById<TextView>(R.id.tvMessage).text = content
+                        dialog.findViewById<TextView>(R.id.tvOk).setOnClickListener {
+                            YsAct.instance()
+                                .showDialog(R.layout.dialog_sample, true, 0.8F, "test2")
+                        }
+                        dialog.findViewById<TextView>(R.id.tvCancel).setOnClickListener {
+                            YsAct.instance().closeDialog()
+                        }
+                    }
+                }, false, 0.5F, tag)
+        }
     }
 }

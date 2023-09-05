@@ -13,6 +13,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
+
 class FmSampleViewModel(private val repo: FmSampleRepo): YsBaseViewModel<FmSampleIntent, FmSampleState>() {
     private val number = MutableStateFlow<Int>(0)
     override fun createInitialState(): FmSampleState { return FmSampleState.Init }
