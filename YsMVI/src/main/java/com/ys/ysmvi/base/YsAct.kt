@@ -25,6 +25,11 @@ abstract class YsAct: AppCompatActivity() {
         setInstance(control)
     }
 
+    override fun onDestroy() {
+        control.closeDialog()
+        super.onDestroy()
+    }
+
     private val control = object: Control {
         override fun getActivity() = this@YsAct
 
@@ -52,7 +57,7 @@ abstract class YsAct: AppCompatActivity() {
             }
         }
 
-        override fun showDialog(setupDialog: SetupDialog, cancelable: Boolean, transparency: Float, tag: String) {
+        override fun showSetupDialog(setupDialog: SetupDialog, cancelable: Boolean, transparency: Float, tag: String) {
             try {
                 Log.e("Dialog", "showSetupDialog tag: $tag")
                 dialogTag[tag]?.cancel()

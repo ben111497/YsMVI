@@ -92,7 +92,7 @@ class FmSample: YsBaseFragment<FmSampleViewModel, FmSampleBinding>() {
     private fun showMessageDialog(tag: String, content: String) {
         handler.post {
             YsAct.instance()
-                .showDialog(object: SetupDialog(R.layout.dialog_message) {
+                .showSetupDialog(object: SetupDialog(R.layout.dialog_message) {
                     override fun setup(dialog: Dialog) {
                         dialog.findViewById<TextView>(R.id.tvMessage).text = content
                         dialog.findViewById<TextView>(R.id.tvOk).setOnClickListener {
