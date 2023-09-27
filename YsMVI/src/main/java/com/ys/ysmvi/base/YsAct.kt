@@ -3,10 +3,13 @@ package com.ys.ysmvi.base
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
@@ -21,6 +24,7 @@ abstract class YsAct: AppCompatActivity() {
     private var navController: NavController? = null // 不要設置為靜態物件，會有內存洩漏問題
     private var menu: Int = -1
     private var tag = "YsAct"
+    private var handler = Handler(Looper.myLooper()!!)
     companion object {
         private val dialogTag = HashMap<String, Dialog>()
         private lateinit var instance: Control
@@ -51,11 +55,16 @@ abstract class YsAct: AppCompatActivity() {
     private val control = object: Control {
         override fun getActivity() = this@YsAct
 
+        override fun getHandler(): Handler = handler
+
         override fun hideKeyboard(view: View?) {
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(view?.windowToken, 0)
         }
 
+        /**
+         * Dialog
+         */
         override fun showDialog(layout: Int, cancelable: Boolean, transparency: Float, tag: String) {
             try {
                 log("showDialog tag: $tag")
@@ -136,6 +145,13 @@ abstract class YsAct: AppCompatActivity() {
             } else {
                 navController?.navigate(menu, null, NavOptions.Builder().setPopUpTo(menu, false).build())
             }
+        }
+
+        /**
+         * Toast
+         */
+        override fun showToast(msg: String, duration: Int) {
+            handler.post { Toast.makeText(getActivity(), msg, duration).show() }
         }
     }
 }

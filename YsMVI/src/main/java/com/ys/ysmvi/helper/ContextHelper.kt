@@ -5,14 +5,7 @@ import android.content.Context
 import android.os.Build
 import android.util.DisplayMetrics
 import android.view.WindowInsets
-import android.widget.Toast
 
-private var toast: Toast? = null
-fun Context.showToast(message: String, duration: Int = Toast.LENGTH_SHORT) {
-    toast?.cancel()
-    toast = Toast.makeText(this, message, duration)
-    toast?.show()
-}
 
 fun Context.getPixel(dp: Int): Int {
     val scale = resources.displayMetrics.density

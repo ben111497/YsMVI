@@ -48,8 +48,8 @@ class FmSample: YsBaseFragment<FmSampleViewModel, FmSampleBinding>() {
                         }
                         is FmSampleState.ShowToast -> {
                             when (it.tag) {
-                                "CurrentNumber" -> showToast(it.content)
-                                else -> showToast(it.content)
+                                "CurrentNumber" -> YsAct.instance().showToast(it.content)
+                                else -> YsAct.instance().showToast(it.content)
                             }
                         }
                         is FmSampleState.NumberChange -> binding?.tvNumber?.text = "${it.num}"
@@ -80,7 +80,6 @@ class FmSample: YsBaseFragment<FmSampleViewModel, FmSampleBinding>() {
     /**
      * Function
      */
-    private fun showToast(content: String) = Toast.makeText(requireActivity(), content, Toast.LENGTH_SHORT).show()
 
     //DialogFragment加入 Control
     private fun showBackDialog(tag: String, content: String) {
