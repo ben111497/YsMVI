@@ -4,6 +4,8 @@ plugins {
     id 'kotlin-kapt'
 }
 
+group = 'com.github.ben111497'
+
 android {
     namespace 'com.ys.ysmvi'
     compileSdk 34
@@ -89,3 +91,17 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 }
+
+//publishing {
+//    publications {
+//        release(MavenPublication) {
+//            groupId = 'com.github.ben111497'
+//            artifactId = 'YsMVI'
+//            version = 'v1.0.0'
+//
+//            afterEvaluate {
+//                from components.release
+//            }
+//        }
+//    }
+//}
