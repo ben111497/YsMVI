@@ -7,5 +7,25 @@
     <fragment
         android:id="@+id/fmSample"
         android:name="com.ys.ysmvi.ui.fragment.sample.FmSample"
-        android:label="FmSample" />
+        android:label="FmSample" >
+        <action
+            android:id="@+id/action_fmSample_to_fmTest1"
+            app:destination="@id/fmTest1" />
+    </fragment>
+    <fragment
+        android:id="@+id/fmTest1"
+        android:name="com.ys.ysmvi.ui.fragment.test1.FmTest1"
+        android:label="FmTest1" >
+        <action
+            android:id="@+id/action_fmTest1_to_fmTest2"
+            app:destination="@id/fmTest2" />
+    </fragment>
+    <fragment
+        android:id="@+id/fmTest2"
+        android:name="com.ys.ysmvi.ui.fragment.test2.FmTest2"
+        android:label="FmTest2" >
+        <action
+            android:id="@+id/action_fmTest2_to_fmSample2"
+            app:destination="@id/fmSample" />
+    </fragment>
 </navigation>

@@ -2,6 +2,7 @@ package com.ys.ysmvi.ui.fragment.sample
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
@@ -53,6 +54,7 @@ class FmSample: YsBaseFragment<FmSampleViewModel, FmSampleBinding>() {
                         }
                         is FmSampleState.NumberChange -> binding?.tvNumber?.text = "${it.num}"
                         is FmSampleState.GetGitData -> binding?.tvRes?.text = it.text
+                        is FmSampleState.Nav -> YsAct.instance().navigate(R.id.fmTest1)
                     }
                 }
             }
@@ -67,6 +69,7 @@ class FmSample: YsBaseFragment<FmSampleViewModel, FmSampleBinding>() {
             btnDecrease.setOnClickListener { viewModel.processIntent(FmSampleIntent.OnBtnDecreaseClick(1)) }
             btnDialog.setOnClickListener { viewModel.processIntent(FmSampleIntent.OnBtnDialog) }
             btnToast.setOnClickListener { viewModel.processIntent(FmSampleIntent.OnBtnToast) }
+            btnNav.setOnClickListener { viewModel.processIntent(FmSampleIntent.OnBtnNav) }
             btnGet.setOnClickListener {
                 YsAct.instance().hideKeyboard(binding?.root)
                 viewModel.processIntent(FmSampleIntent.OnBtnGetClick(edName.text.toString()))

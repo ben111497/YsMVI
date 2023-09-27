@@ -7,4 +7,5 @@ sealed class FmSampleIntent {
     data class OnBtnGetClick(val name: String): FmSampleIntent()
     object OnBtnDialog: FmSampleIntent()
     object OnBtnToast: FmSampleIntent()
+    object OnBtnNav: FmSampleIntent()
 }

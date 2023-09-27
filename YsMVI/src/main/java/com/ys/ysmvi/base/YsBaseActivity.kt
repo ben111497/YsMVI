@@ -19,12 +19,14 @@ abstract class YsBaseActivity<ViewModel: androidx.lifecycle.ViewModel, binding: 
         super.onCreate(savedInstanceState)
         initViewBinding()
         initViewModel()
+        viewInit()
         collectViewModel()
         setListener()
     }
 
     abstract fun initViewBinding()
     abstract fun initViewModel()
+    abstract fun viewInit()
     abstract fun collectViewModel()
     abstract fun setListener()
 

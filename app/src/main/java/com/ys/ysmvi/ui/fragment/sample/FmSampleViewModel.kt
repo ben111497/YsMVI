@@ -22,6 +22,7 @@ class FmSampleViewModel(private val repo: FmSampleRepo): YsBaseViewModel<FmSampl
             FmSampleIntent.Init -> {}
             FmSampleIntent.OnBtnDialog -> _state.value = FmSampleState.ShowDialog("Message", "${number.value}")
             FmSampleIntent.OnBtnToast -> _state.value = FmSampleState.ShowToast("CurrentNumber", "${number.value}")
+            FmSampleIntent.OnBtnNav -> _state.value = FmSampleState.Nav()
             is FmSampleIntent.OnBtnDecreaseClick -> setNumber(number.value - intent.num)
             is FmSampleIntent.OnBtnIncreaseClick -> setNumber(number.value + intent.num)
             is FmSampleIntent.OnBtnGetClick -> {

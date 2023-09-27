@@ -8,11 +8,19 @@ import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
+import androidx.navigation.NavOptions
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.NavHostFragment
 import com.ys.ysmvi.R
 import java.lang.Exception
+import java.lang.ref.WeakReference
 
 
 abstract class YsAct: AppCompatActivity() {
+    private var navController: NavController? = null // 不要設置為靜態物件，會有內存洩漏問題
+    private var menu: Int = -1
+    private var tag = "YsAct"
     companion object {
         private val dialogTag = HashMap<String, Dialog>()
         private lateinit var instance: Control
@@ -27,8 +35,18 @@ abstract class YsAct: AppCompatActivity() {
 
     override fun onDestroy() {
         control.closeDialog()
+        navController = null
         super.onDestroy()
     }
+
+    private fun checkNav(): Boolean {
+        return if (navController == null) {
+            log("Navigation is not initialized")
+            false
+        } else true
+    }
+
+    private fun log(str: String) { Log.e(tag, str) }
 
     private val control = object: Control {
         override fun getActivity() = this@YsAct
@@ -40,7 +58,7 @@ abstract class YsAct: AppCompatActivity() {
 
         override fun showDialog(layout: Int, cancelable: Boolean, transparency: Float, tag: String) {
             try {
-                Log.e("Dialog", "showDialog tag: $tag")
+                log("showDialog tag: $tag")
                 dialogTag[tag]?.cancel()
                 dialogTag[tag] = Dialog(this@YsAct, R.style.SwipDialog).also { dialog ->
                     dialog.setContentView(layout)
@@ -53,13 +71,13 @@ abstract class YsAct: AppCompatActivity() {
                     dialog.show()
                 }
             } catch (e: Exception) {
-                Log.e("Dialog", "error: ${e.message}")
+                log(" Dialog error: ${e.message}")
             }
         }
 
         override fun showSetupDialog(setupDialog: SetupDialog, cancelable: Boolean, transparency: Float, tag: String) {
             try {
-                Log.e("Dialog", "showSetupDialog tag: $tag")
+                log("showSetupDialog tag: $tag")
                 dialogTag[tag]?.cancel()
                 dialogTag[tag] = Dialog(this@YsAct, R.style.SwipDialog).also { dialog ->
                     dialog.setContentView(setupDialog.layout)
@@ -74,18 +92,49 @@ abstract class YsAct: AppCompatActivity() {
                     dialog.show()
                 }
             } catch (e: Exception) {
-                Log.e("Dialog", "error: ${e.message}")
+                log("Dialog error: ${e.message}")
             }
         }
 
         override fun closeDialog(tag: String?) {
-            Log.e("Dialog", "closeDialog: ${tag.takeIf { it != null } ?: "all"}")
+            log("closeDialog: ${tag.takeIf { it != null } ?: "all"}")
             if (tag == null) {
                 dialogTag.forEach { (_, dialog) -> dialog.cancel() }
                 dialogTag.clear()
             } else {
                 dialogTag[tag]?.cancel()
                 dialogTag.remove(tag)
+            }
+        }
+
+        /**
+         * Navigation
+         */
+        override fun initNavigation(nav: NavController) {
+            navController = nav
+            navController?.addOnDestinationChangedListener { _, destination, _ ->
+                log("currentPage: ${destination.displayName.split("/")[1]}")
+            }
+        }
+
+        override fun navigate(id: Int) {
+            if (!checkNav()) return
+            navController?.navigate(id)
+        }
+
+        override fun goBack(id: Int?) {
+            if (!checkNav()) return
+            if (id == null) navController?.navigateUp() else navController?.popBackStack(id, false)
+        }
+
+        override fun setMenu(id: Int) { menu = id }
+
+        override fun goMenu() {
+            if (!checkNav()) return
+            if (menu == -1) {
+                log("Do not set menu")
+            } else {
+                navController?.navigate(menu, null, NavOptions.Builder().setPopUpTo(menu, false).build())
             }
         }
     }
