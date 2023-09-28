@@ -97,7 +97,7 @@ dependencies {
 //        release(MavenPublication) {
 //            groupId = 'com.github.ben111497'
 //            artifactId = 'YsMVI'
-//            version = 'v1.0.0'
+//            version = 'v1.0.2'
 //
 //            afterEvaluate {
 //                from components.release
