@@ -11,6 +11,8 @@ interface Control {
     fun hideKeyboard(view: View?)
     fun showDialog(layout: Int, cancelable: Boolean, transparency: Float = 0.5F, tag: String)
     fun showSetupDialog(setupDialog: SetupDialog, cancelable: Boolean, transparency: Float = 0.5F, tag: String)
+    fun showDialogFragment(setupDialog: SetupDialog, tag: String)
+    fun showBottomSheet(setupDialog: SetupDialog, tag: String)
     fun closeDialog(tag: String? = null)
     fun initNavigation(nav: NavController)
     fun navigate(id: Int)

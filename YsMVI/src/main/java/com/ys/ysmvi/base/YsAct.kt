@@ -11,10 +11,12 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.DialogFragment
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.ys.ysmvi.R
 import java.lang.Exception
 import java.lang.ref.WeakReference
@@ -90,7 +92,6 @@ abstract class YsAct: AppCompatActivity() {
                 dialogTag[tag]?.cancel()
                 dialogTag[tag] = Dialog(this@YsAct, R.style.SwipDialog).also { dialog ->
                     dialog.setContentView(setupDialog.layout)
-                    setupDialog.dialog = dialog
                     setupDialog.setup(dialog)
                     dialog.window!!.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT)
                     dialog.window!!.setDimAmount(transparency)
@@ -102,6 +103,29 @@ abstract class YsAct: AppCompatActivity() {
                 }
             } catch (e: Exception) {
                 log("Dialog error: ${e.message}")
+            }
+        }
+
+        override fun showDialogFragment(setupDialog: SetupDialog, tag: String) {
+            try {
+                log("showDialogFragment tag: $tag")
+                YsBaseIdDialogFragment(setupDialog.layout) { setupDialog.setup(it) }.show(getActivity().supportFragmentManager, tag)
+            } catch (e: Exception) {
+                log("DialogFragment error: ${e.message}")
+            }
+        }
+
+        override fun showBottomSheet(setupDialog: SetupDialog, tag: String) {
+            try {
+                log("showButtonSheet tag: $tag")
+                val dialog = BottomSheetDialog(getActivity())
+                val view = layoutInflater.inflate(setupDialog.layout, null)
+                //dialog.setCancelable(false)
+                dialog.setContentView(view)
+                setupDialog.setup(dialog)
+                dialog.show()
+            } catch (e: Exception) {
+                log("ButtonSheet error: ${e.message}")
             }
         }
 

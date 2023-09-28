@@ -98,11 +98,14 @@ class FmSample: YsBaseFragment<FmSampleViewModel, FmSampleBinding>() {
                     override fun setup(dialog: Dialog) {
                         dialog.findViewById<TextView>(R.id.tvMessage).text = content
                         dialog.findViewById<TextView>(R.id.tvOk).setOnClickListener {
-                            YsAct.instance()
-                                .showDialog(R.layout.dialog_sample, true, 0.8F, "test2")
+                            YsAct.instance().showDialog(R.layout.dialog_sample, true, 0.8F, "test2")
                         }
                         dialog.findViewById<TextView>(R.id.tvCancel).setOnClickListener {
-                            YsAct.instance().closeDialog()
+                            YsAct.instance().showBottomSheet(object: SetupDialog(R.layout.dialog_test) {
+                                override fun setup(dialog: Dialog) {
+                                    dialog.findViewById<TextView>(R.id.btnClose).setOnClickListener { dialog.dismiss() }
+                                }
+                            }, "test")
                         }
                     }
                 }, false, 0.5F, tag)

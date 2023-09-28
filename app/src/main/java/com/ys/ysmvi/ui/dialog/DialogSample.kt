@@ -2,10 +2,10 @@ package com.ys.ysmvi.ui.dialog
 
 import android.view.*
 import androidx.lifecycle.ViewModel
-import com.ys.ysmvi.base.YsBaseDialogFragment
+import com.ys.ysmvi.base.YsBaseBindDialogFragment
 import com.ys.ysmvi.databinding.DialogSampleBinding
 
-class DialogSample(private val hint: String): YsBaseDialogFragment<ViewModel, DialogSampleBinding>(0.75) {
+class DialogSample(private val hint: String): YsBaseBindDialogFragment<ViewModel, DialogSampleBinding>(0.75) {
     private lateinit var listener: Listener
 
     interface Listener {
