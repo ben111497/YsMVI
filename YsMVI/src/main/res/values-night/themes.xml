@@ -39,6 +39,11 @@
         <item name="colorControlHighlight">#44000000</item>
     </style>
 
+    <style name="SwipTheme." parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item> 　　
+    </style>
+
     <style name="SwipDialog" parent="Theme.AppCompat.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowFrame">@null</item>

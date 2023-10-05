@@ -111,7 +111,7 @@ abstract class YsAct: AppCompatActivity() {
                 log("showDialogFragment tag: $tag")
                 YsBaseIdDialogFragment(setupDialog.layout) { setupDialog.setup(it) }.show(getActivity().supportFragmentManager, tag)
             } catch (e: Exception) {
-                log("DialogFragment error: ${e.message}")
+                log("showDialogFragment error: ${e.message}")
             }
         }
 
