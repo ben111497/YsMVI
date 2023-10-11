@@ -2,22 +2,16 @@ package com.ys.ysmvi.ui.fragment.sample
 
 import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
 import android.widget.TextView
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.viewbinding.ViewBinding
 import com.ys.ysmvi.R
 import com.ys.ysmvi.base.SetupDialog
-import com.ys.ysmvi.base.SetupDialogBinding
 import com.ys.ysmvi.base.YsAct
 import com.ys.ysmvi.base.YsBaseFragment
 import com.ys.ysmvi.data.room.RoomSample
-import com.ys.ysmvi.databinding.DialogSampleBinding
 import com.ys.ysmvi.databinding.FmSampleBinding
-import com.ys.ysmvi.helper.setOnBackPressed
+import com.ys.ysmvi.extention.setOnBackPressed
 import com.ys.ysmvi.model.Repository
 import com.ys.ysmvi.ui.dialog.ShowMessageDialog
 import com.ys.ysmvi.ui.Factory.ViewModelFactory

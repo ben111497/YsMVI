@@ -1,4 +1,4 @@
-package com.ys.ysmvi.helper
+package com.ys.ysmvi.extention
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken

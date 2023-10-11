@@ -7,7 +7,7 @@ import com.google.gson.reflect.TypeToken
 import com.ys.ysmvi.base.YsBaseViewModel
 import com.ys.ysmvi.data.retrofit.Repo
 import com.ys.ysmvi.data.room.Api
-import com.ys.ysmvi.helper.fromJsonArray
+import com.ys.ysmvi.extention.fromJsonArray
 import com.ys.ysmvi.model.YsResponse
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow

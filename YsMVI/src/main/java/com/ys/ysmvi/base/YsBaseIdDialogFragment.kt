@@ -3,19 +3,14 @@ package com.ys.ysmvi.base
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
-import android.view.GestureDetector
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.TextView
 import androidx.fragment.app.DialogFragment
-import androidx.viewbinding.ViewBinding
 import com.ys.ysmvi.R
-import com.ys.ysmvi.helper.getScreenHeightPixel
-import com.ys.ysmvi.helper.getScreenWidthPixel
-import java.lang.Math.abs
+import com.ys.ysmvi.extention.getScreenHeightPixel
+import com.ys.ysmvi.extention.getScreenWidthPixel
 
 open class YsBaseIdDialogFragment(private val layout: Int, private val pWidth: Double = 1.0, private val pHeight: Double = 1.0,
                                   val setup: (Dialog) -> Unit) : DialogFragment() {

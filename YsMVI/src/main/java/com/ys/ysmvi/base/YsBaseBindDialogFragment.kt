@@ -8,7 +8,7 @@ import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import androidx.viewbinding.ViewBinding
 import com.ys.ysmvi.R
-import com.ys.ysmvi.helper.getScreenWidthPixel
+import com.ys.ysmvi.extention.getScreenWidthPixel
 
 abstract class YsBaseBindDialogFragment<ViewModel: androidx.lifecycle.ViewModel?, Binding: ViewBinding>
 constructor(private val widthPercent: Double = -1.0, private val heightPercent: Double = -1.0): DialogFragment() {
