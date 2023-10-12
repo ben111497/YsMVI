@@ -2,6 +2,7 @@ package com.ys.ysmvi.base
 
 import android.app.Dialog
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -11,6 +12,7 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
@@ -27,6 +29,12 @@ abstract class YsAct: AppCompatActivity() {
     private var menu: Int = -1
     private var tag = "YsAct"
     private var handler = Handler(Looper.myLooper()!!)
+    private var mRequestPermission: RequestPermission? = null
+
+    interface RequestPermission {
+        fun onCallBack(isSuccess: Boolean, requestCode: Int)
+    }
+
     companion object {
         private val dialogTag = HashMap<String, Dialog>()
         private lateinit var instance: Control
@@ -45,6 +53,15 @@ abstract class YsAct: AppCompatActivity() {
         super.onDestroy()
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            mRequestPermission?.onCallBack(true, requestCode)
+        } else {
+            mRequestPermission?.onCallBack(false, requestCode)
+        }
+    }
+
     private fun checkNav(): Boolean {
         return if (navController == null) {
             log("Navigation is not initialized")
@@ -56,6 +73,14 @@ abstract class YsAct: AppCompatActivity() {
 
     private val control = object: Control {
         override fun getActivity() = this@YsAct
+
+        override fun checkAndRequestPermission(permission: String, requestCode: Int, listener: RequestPermission): Boolean {
+            return if (ActivityCompat.checkSelfPermission(instance().getActivity(), permission) != PackageManager.PERMISSION_GRANTED) {
+                mRequestPermission = listener
+                ActivityCompat.requestPermissions(instance().getActivity(), Array<String>(1) { permission }, requestCode)
+                false
+            } else true
+        }
 
         override fun getHandler(): Handler = handler
 

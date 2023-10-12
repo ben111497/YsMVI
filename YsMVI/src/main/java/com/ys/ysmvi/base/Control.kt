@@ -7,6 +7,7 @@ import androidx.navigation.NavController
 
 interface Control {
     fun getActivity(): YsAct
+    fun checkAndRequestPermission(permission: String, requestCode: Int, listener: YsAct.RequestPermission): Boolean
     fun getHandler(): android.os.Handler
     fun hideKeyboard(view: View?)
     fun showDialog(layout: Int, cancelable: Boolean, transparency: Float = 0.5F, tag: String)
